@@ -10,7 +10,7 @@ from traitlets.config import Configurable
 from notebook.utils import url_path_join, url_escape
 from notebook.base.handlers import APIHandler
 
-__version__ = '0.7.0'
+__version__ = '1.0.0'
 
 
 link_regex = re.compile(r'<([^>]*)>;\s*rel="([\w]*)\"')
@@ -35,18 +35,7 @@ class GitHubConfig(Configurable):
     )
     access_token = Unicode(
         '', config=True,
-        help=(
-            "A personal access token for GitHub. If specified it takes "
-            "precedence over the `client_id` and `client_secret`"
-        )
-    )
-    client_id = Unicode(
-        '', config=True,
-        help="The Client ID for the GitHub OAuth app"
-    )
-    client_secret = Unicode(
-        '', config=True,
-        help="The Client secret for the GitHub OAuth app"
+        help="A personal access token for GitHub."
     )
     validate_cert = Bool(
         True, config=True,
@@ -96,10 +85,6 @@ class GitHubHandler(APIHandler):
             elif c.access_token != '':
                 # Preferentially use the access_token if set
                 params['access_token'] = c.access_token
-            elif c.client_id != '' and c.client_secret != '':
-                # Otherwise use client_id and client_secret if set
-                params['client_id'] = c.client_id
-                params['client_secret'] = c.client_secret
 
             api_path = url_concat(api_path, params)
             client = AsyncHTTPClient()
